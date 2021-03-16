@@ -56,6 +56,7 @@ main (int argc, char *argv[])
 	if (client == NULL) {
 		if (status & JackServerFailed) {
 			fprintf (stderr, "JACK server not running.\n");
+			exit (0);
 		} else {
 			fprintf (stderr, "JACK open failed, "
 				 "status = 0x%2.0x\n", status);
@@ -68,7 +69,7 @@ main (int argc, char *argv[])
 	intclient = jack_internal_client_handle (client, client_name, &status);
 	if (status & JackFailure) {
 		fprintf (stderr, "client %s not found.\n", client_name);
-		exit (2);
+		goto close;
 	}
 
 	/* now, unload the internal client */
@@ -77,6 +78,7 @@ main (int argc, char *argv[])
 		if (status & JackNoSuchClient) {
 			fprintf (stderr, "client %s is gone.\n",
 				 client_name);
+			goto close;
 		} else {
 			fprintf (stderr, "could not unload %s, "
 				 "returns 0x%2.0x\n", client_name, status);
@@ -86,7 +88,8 @@ main (int argc, char *argv[])
 		fprintf (stdout, "%s unloaded.\n", client_name);
 	}
 
-    jack_client_close(client);
+close:
+	jack_client_close(client);
 	return 0;
 }
 
