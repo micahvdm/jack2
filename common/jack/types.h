@@ -542,13 +542,17 @@ typedef enum {
     JackPositionTimecode = 0x20,        /**< External timecode */
     JackBBTFrameOffset =      0x40,     /**< Frame offset of BBT information */
     JackAudioVideoRatio =     0x80, /**< audio frames per video frame */
-    JackVideoFrameOffset =   0x100  /**< frame offset of first video frame */
+    JackVideoFrameOffset =   0x100,  /**< frame offset of first video frame */
+    JackTickDouble       = 0x200
 
 } jack_position_bits_t;
 
 /** all valid position bits */
 #define JACK_POSITION_MASK (JackPositionBBT|JackPositionTimecode)
 #define EXTENDED_TIME_INFO
+
+/** MOD hack: tick in double resolution */
+#define JACK_TICK_DOUBLE
 
 PRE_PACKED_STRUCTURE
 struct _jack_position {
