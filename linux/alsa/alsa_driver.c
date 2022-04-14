@@ -412,7 +412,7 @@ alsa_driver_configure_stream (alsa_driver_t *driver, char *device_name,
 	}
 
 #ifdef _MOD_DEVICE_DWARF
-	if (strcmp(stream_name, "playback") == 0)
+	if (getenv("MOD_JACKD") != NULL && strcmp(stream_name, "playback") == 0)
 	{
 		jack_info ("ALSA: MOD Devices 16bit playback hack active");
 		sample_width = 2;
