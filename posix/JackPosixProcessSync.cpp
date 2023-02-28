@@ -109,11 +109,11 @@ bool JackPosixProcessSync::TimedWait(long usec)
     fOwner = 0;
 
     int res;
-    timespec now;
-    clock_gettime(fClockType, &now);
+    struct timeval now;
+    gettimeofday (&now, NULL);
 
     timespec delta = { usec / 1000000, (usec % 1000000) * 1000 };
-    timespec end   = { now.tv_sec + delta.tv_sec, now.tv_nsec + delta.tv_nsec };
+    timespec end   = { now.tv_sec + delta.tv_sec, now.tv_usec * 1000 + delta.tv_nsec };
     if (end.tv_nsec >= 1000000000L) {
         ++end.tv_sec;
         end.tv_nsec -= 1000000000L;
@@ -137,11 +137,11 @@ bool JackPosixProcessSync::LockedTimedWait(long usec)
         jack_error("JackPosixProcessSync::LockedTimedWait error err = %s", usec, strerror(res1));
     }
 
-    timespec now;
-    clock_gettime(fClockType, &now);
+    struct timeval now;
+    gettimeofday (&now, NULL);
 
     timespec delta = { usec / 1000000, (usec % 1000000) * 1000 };
-    timespec end   = { now.tv_sec + delta.tv_sec, now.tv_nsec + delta.tv_nsec };
+    timespec end   = { now.tv_sec + delta.tv_sec, now.tv_usec * 1000 + delta.tv_nsec };
     if (end.tv_nsec >= 1000000000L) {
         ++end.tv_sec;
         end.tv_nsec -= 1000000000L;

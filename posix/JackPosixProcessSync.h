@@ -38,27 +38,14 @@ class JackPosixProcessSync : public JackBasePosixMutex
     private:
 
         pthread_cond_t fCond;   // Condition variable
-        int fClockType;
 
     public:
 
         JackPosixProcessSync(const char* name = NULL):JackBasePosixMutex()
         {
             int res;
-            pthread_condattr_t attr;
-            pthread_condattr_init (&attr);
-
-            if (pthread_condattr_setclock (&attr, CLOCK_MONOTONIC_RAW) == 0)
-                fClockType = CLOCK_MONOTONIC_RAW;
-            else if (pthread_condattr_setclock (&attr, CLOCK_MONOTONIC) == 0)
-                fClockType = CLOCK_MONOTONIC;
-            else
-                fClockType = CLOCK_REALTIME;
-
-            res = pthread_cond_init(&fCond, &attr);
+            res = pthread_cond_init(&fCond, NULL);
             ThrowIf(res != 0, JackException("JackBasePosixMutex: could not init the cond variable"));
-
-            pthread_condattr_destroy (&attr);
         }
 
         virtual ~JackPosixProcessSync()

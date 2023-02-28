@@ -122,18 +122,15 @@ static jack_time_t jack_get_microseconds_from_hpet (void)
 
 #endif /* HPET_SUPPORT */
 
-#define HAVE_CLOCK_GETTIME 1
+#define HAVE_CLOCK_GETTIME 0
 
 #ifndef HAVE_CLOCK_GETTIME
 
 static jack_time_t jack_get_microseconds_from_system (void)
 {
-	jack_time_t jackTime;
 	struct timeval tv;
-
 	gettimeofday (&tv, NULL);
-	jackTime = (jack_time_t) tv.tv_sec * 1000000 + (jack_time_t) tv.tv_usec;
-	return jackTime;
+	return (jack_time_t) tv.tv_sec * 1000000 + (jack_time_t) tv.tv_usec;
 }
 
 #else
